@@ -48,6 +48,7 @@ abstract class SkinComponent {
 	}
 
 	/**
+	 * Returns the geometry (Geometry.php) of this skin component.
 	 * @return Geometry
 	 */
 	public function getGeometry(): Geometry {
@@ -55,6 +56,8 @@ abstract class SkinComponent {
 	}
 
 	/**
+	 * Returns a pixel (SkinPixel.php) on a relative position in this skin component.
+	 *
 	 * @param int $x
 	 * @param int $y
 	 *
@@ -71,6 +74,8 @@ abstract class SkinComponent {
 	}
 
 	/**
+	 * Returns whether this skin has a skin field associated with it or not.
+	 *
 	 * @return bool
 	 */
 	public function hasSkin(): bool {
@@ -78,6 +83,8 @@ abstract class SkinComponent {
 	}
 
 	/**
+	 * Returns the width of the skin of this skin component.
+	 *
 	 * @return int
 	 */
 	public function getSkinWidth(): int {
@@ -85,6 +92,7 @@ abstract class SkinComponent {
 	}
 
 	/**
+	 * Returns the height of the skin of this skin component.
 	 * @return int
 	 */
 	public function getSkinHeight(): int {
@@ -92,6 +100,8 @@ abstract class SkinComponent {
 	}
 
 	/**
+	 * Returns the X offset for the location of this component in the complete skin.
+	 *
 	 * @return int
 	 */
 	public function getXOffset(): int {
@@ -99,6 +109,8 @@ abstract class SkinComponent {
 	}
 
 	/**
+	 * Returns the Y offset for the location of this component in the complete skin.
+	 *
 	 * @return int
 	 */
 	public function getYOffset(): int {

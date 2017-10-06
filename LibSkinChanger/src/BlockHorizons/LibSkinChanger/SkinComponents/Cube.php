@@ -41,6 +41,9 @@ class Cube implements \JsonSerializable {
 	}
 
 	/**
+	 * Returns the origin of this cube.
+	 * Returns an array containing 3 floats.
+	 *
 	 * @return float[]
 	 */
 	public function getOrigin(): array {
@@ -48,6 +51,9 @@ class Cube implements \JsonSerializable {
 	}
 
 	/**
+	 * Sets the origin of this cube.
+	 * Should be an array containing 3 floats.
+	 *
 	 * @param float[] $origin
 	 */
 	public function setOrigin(array $origin): void {
@@ -55,6 +61,9 @@ class Cube implements \JsonSerializable {
 	}
 
 	/**
+	 * Returns the size of this cube.
+	 * Returns an array containing 3 floats.
+	 *
 	 * @return float[]
 	 */
 	public function getSize(): array {
@@ -62,6 +71,9 @@ class Cube implements \JsonSerializable {
 	}
 
 	/**
+	 * Sets the size of this cube.
+	 * Should be an array containing 3 floats.
+	 *
 	 * @param float[] $size
 	 */
 	public function setSize(array $size): void {
@@ -69,6 +81,9 @@ class Cube implements \JsonSerializable {
 	}
 
 	/**
+	 * Returns the UV of this cube. This means the pixel location on the skin of the player.
+	 * Returns an array containing 2 floats.
+	 *
 	 * @return float[]
 	 */
 	public function getUv(): array {
@@ -76,6 +91,9 @@ class Cube implements \JsonSerializable {
 	}
 
 	/**
+	 * Sets the UV of this cube. This means the pixel location on the skin of the player.
+	 * Should be an array containing 2 floats.
+	 *
 	 * @param float[] $uv
 	 */
 	public function setUv(array $uv): void {
@@ -83,6 +101,8 @@ class Cube implements \JsonSerializable {
 	}
 
 	/**
+	 * Returns how far from the original size this cube should be extended.
+	 *
 	 * @return float
 	 */
 	public function getInflate(): float {
@@ -90,6 +110,8 @@ class Cube implements \JsonSerializable {
 	}
 
 	/**
+	 * Sets how far from the original size this cube should be extended.
+	 *
 	 * @param float $inflate
 	 */
 	public function setInflate(float $inflate): void {
@@ -97,6 +119,8 @@ class Cube implements \JsonSerializable {
 	}
 
 	/**
+	 * Returns whether the rotation of this cube is mirrored.
+	 *
 	 * @return bool
 	 */
 	public function isMirrored(): bool {
@@ -104,6 +128,8 @@ class Cube implements \JsonSerializable {
 	}
 
 	/**
+	 * Sets the rotation of this cube mirrored.
+	 *
 	 * @param bool $value
 	 */
 	public function setMirrored(bool $value = true): void {

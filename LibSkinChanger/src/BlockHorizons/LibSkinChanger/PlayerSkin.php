@@ -97,6 +97,7 @@ class PlayerSkin {
 		$geometryName = $skin->getGeometryName();
 		$stream = new BinaryStream($skinData);
 		$this->skinHeight = strlen($skinData) === 16384 ? 64 : 32;
+
 		for($x = 0; $x < $this->skinWidth; $x++) {
 			for($y = 0; $y < $this->skinHeight; $y++) {
 				if(!$stream->feof()) {
@@ -104,11 +105,22 @@ class PlayerSkin {
 				}
 			}
 		}
+
 		if(empty($geometryData)) {
 			$geometryData = file_get_contents(__DIR__ . "/default_geometry.json");
 			$geometryName = "geometry.humanoid";
 		}
-		$geometry = json_decode($geometryData, true)[$geometryName];
+
+		$geometryData = json_decode($geometryData, true);
+
+		$inheritance = "";
+		if(strpos($geometryName, ":") !== false) {
+			$parts = explode(":", $geometryName);
+			$geometryName = $parts[0];
+			$inheritance = $parts[1];
+		}
+		$geometry = array_merge($geometryData[$geometryName], $geometryData[$inheritance] ?? []);
+
 		if($this->skinHeight === 64) {
 			foreach(self::COMPONENTS_LARGE_FORMAT as $key => $component) {
 				$this->skinComponents[$key] = new $component($this, $geometry);
@@ -118,6 +130,8 @@ class PlayerSkin {
 	}
 
 	/**
+	 * Returns all skin components of this skin, which can be found in the constants above.
+	 *
 	 * @return SkinComponent[]
 	 */
 	public function getSkinComponents(): array {
@@ -125,6 +139,8 @@ class PlayerSkin {
 	}
 
 	/**
+	 * Returns the component with the given ID from a constant found above.
+	 *
 	 * @param int $id
 	 *
 	 * @return SkinComponent|null
@@ -134,6 +150,8 @@ class PlayerSkin {
 	}
 
 	/**
+	 * Returns the pixel (SkinPixel.php) at the given location of the skin.
+	 *
 	 * @param int $x
 	 * @param int $y
 	 *
@@ -150,6 +168,8 @@ class PlayerSkin {
 	}
 
 	/**
+	 * Returns the width of the skin.
+	 *
 	 * @return int
 	 */
 	public function getSkinWidth(): int {
@@ -157,6 +177,8 @@ class PlayerSkin {
 	}
 
 	/**
+	 * Returns the height of the skin.
+	 *
 	 * @return int
 	 */
 	public function getSkinHeight(): int {
@@ -164,6 +186,9 @@ class PlayerSkin {
 	}
 
 	/**
+	 * Returns the skin data after being modified.
+	 * This is the skin data that is input for the pocketmine\entity\Skin constructor.
+	 *
 	 * @return string
 	 */
 	public function getSkinData(): string {
@@ -175,11 +200,14 @@ class PlayerSkin {
 	}
 
 	/**
+	 * Returns the geometry data with the given geometry name. This geometry name should be different than the original.
+	 * This is the geometry data that is input for the pocketmine\entity\Skin constructor.
+	 *
 	 * @param string $geometryName
 	 *
 	 * @return string
 	 */
-	public function getGeometryJson(string $geometryName): string {
+	public function getGeometryData(string $geometryName): string {
 		$json = [];
 		foreach($this->getSkinComponents() as $component) {
 			$json[$geometryName]["bones"][] = $component->getGeometry()->jsonSerialize();
@@ -188,6 +216,8 @@ class PlayerSkin {
 	}
 
 	/**
+	 * Returns the geometry name of the original skin.
+	 *
 	 * @return string
 	 */
 	public function getGeometryName(): string {

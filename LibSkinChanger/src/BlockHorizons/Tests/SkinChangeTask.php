@@ -35,7 +35,7 @@ class SkinChangeTask extends AsyncTask {
 		if($player === null) {
 			return;
 		}
-		$player->setSkin(new Skin("testSkin", $newSkin->getSkinData(), $this->skin->getCapeData(), "geometry.test", $newSkin->getGeometryJson("geometry.test")));
+		$player->setSkin(new Skin("testSkin", $newSkin->getSkinData(), $this->skin->getCapeData(), "geometry.test", $newSkin->getGeometryData("geometry.test")));
 		$player->sendSkin($server->getOnlinePlayers());
 	}
 }

@@ -49,6 +49,9 @@ class Geometry implements \JsonSerializable {
 	}
 
 	/**
+	 * Returns an array containing the pivot (rotation point) of this component.
+	 * Returns array with 3 floats.
+	 *
 	 * @return float[]
 	 */
 	public function getPivot(): array {
@@ -56,6 +59,9 @@ class Geometry implements \JsonSerializable {
 	}
 
 	/**
+	 * Sets the pivot (rotation point) of this component.
+	 * Should be an array containing 3 floats.
+	 *
 	 * @param float[] $pivot
 	 *
 	 * @return Geometry
@@ -67,6 +73,9 @@ class Geometry implements \JsonSerializable {
 	}
 
 	/**
+	 * Returns the rotation of this component.
+	 * Returns array with 3 floats.
+	 *
 	 * @return float[]
 	 */
 	public function getRotation(): array {
@@ -74,6 +83,9 @@ class Geometry implements \JsonSerializable {
 	}
 
 	/**
+	 * Sets the rotation of this component.
+	 * Should be an array containing 3 floats.
+	 *
 	 * @param float[] $rotation
 	 *
 	 * @return Geometry
@@ -85,6 +97,8 @@ class Geometry implements \JsonSerializable {
 	}
 
 	/**
+	 * Returns all cubes (Cube.php) of this component.
+	 *
 	 * @return Cube[]
 	 */
 	public function getCubes(): array {
@@ -92,6 +106,9 @@ class Geometry implements \JsonSerializable {
 	}
 
 	/**
+	 * Adds a cube to this component.
+	 * See Cube.php
+	 *
 	 * @param Cube $cube
 	 *
 	 * @return Geometry
@@ -103,12 +120,17 @@ class Geometry implements \JsonSerializable {
 	}
 
 	/**
+	 * Deletes a cube with the given ID.
+	 *
 	 * @param int $key
 	 */
 	public function deleteCube(int $key): void {
 		unset($this->cubes[$key]);
 	}
 
+	/**
+	 * Deletes all cubes of this component.
+	 */
 	public function deleteAllCubes(): void {
 		foreach($this->cubes as $key => $cube) {
 			unset($this->cubes[$key]);
@@ -116,6 +138,8 @@ class Geometry implements \JsonSerializable {
 	}
 
 	/**
+	 * Returns the name of this geometry component.
+	 *
 	 * @return string
 	 */
 	public function getName(): string {
@@ -123,6 +147,8 @@ class Geometry implements \JsonSerializable {
 	}
 
 	/**
+	 * Returns the meta bone type of this geometry component.
+	 *
 	 * @return string
 	 */
 	public function getMetaBoneType(): string {
@@ -130,6 +156,8 @@ class Geometry implements \JsonSerializable {
 	}
 
 	/**
+	 * Returns the parent of this geometry component.
+	 *
 	 * @return string
 	 */
 	public function getParent(): string {
@@ -137,6 +165,8 @@ class Geometry implements \JsonSerializable {
 	}
 
 	/**
+	 * Returns all cubes in an array form instead of Cube instances.
+	 *
 	 * @return array
 	 */
 	public function getCubeArray(): array {
@@ -148,6 +178,8 @@ class Geometry implements \JsonSerializable {
 	}
 
 	/**
+	 * Returns whether this geometry component should render (be visible) to the client.
+	 *
 	 * @return bool
 	 */
 	public function shouldRender(): bool {
@@ -155,6 +187,8 @@ class Geometry implements \JsonSerializable {
 	}
 
 	/**
+	 * Sets this geometry component to (not) render this component.
+	 *
 	 * @param bool $value
 	 *
 	 * @return Geometry
