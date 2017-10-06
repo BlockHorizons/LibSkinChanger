@@ -1,0 +1,9 @@
+--- # Poggit-CI Manifest. Open the CI at https://poggit.pmmp.io/ci/BlockHorizons/LibSkinChanger
+branches:
+- master
+projects:
+  LibSkinChanger:
+    path: LibSkinChanger/
+    model: virion
+    type: library
+...
