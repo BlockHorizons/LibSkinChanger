@@ -38,6 +38,7 @@ Step 4. Push a commit to your repository to make Poggit build, and the library w
 
 ### Where can I find the API?
 The API of this library is scattered through a couple files. All API functions contain documentation which should make the functionality very clear.
+Due to potentially time consuming operations, it is recommended to make geometry and skin modifications in an async task, as seen in the test plugin.
 
 API Files:
 - /PlayerSkin.php
