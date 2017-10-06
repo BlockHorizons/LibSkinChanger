@@ -30,7 +30,7 @@ projects:
   YourPlugin:
     path: ""
     libs:
-      - src: BlockHorizons/LigSkinChanger/LibSkinChanger
+      - src: BlockHorizons/LibSkinChanger/LibSkinChanger
         version: ^1.0.0
 ...
 ```
