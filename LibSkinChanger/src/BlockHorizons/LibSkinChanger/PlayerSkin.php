@@ -73,7 +73,7 @@ class PlayerSkin {
 	/** @var string */
 	private $geometryName = "";
 
-	public function __construct(string $skinData, string $geometryData = "", string $geometryName) {
+	public function __construct(string $skinData, string $geometryData = "", string $geometryName = "") {
 		$stream = new BinaryStream($skinData);
 		$this->skinHeight = strlen($skinData) === 16384 ? 64 : 32;
 		for($x = 0; $x < $this->skinWidth; $x++) {
@@ -85,6 +85,7 @@ class PlayerSkin {
 		}
 		if(empty($geometryData)) {
 			$geometryData = file_get_contents(__DIR__ . "/default_geometry.json");
+			$geometryName = "geometry.humanoid";
 		}
 		$geometry = json_decode($geometryData, true)[$geometryName];
 		if($this->skinHeight === 64) {
