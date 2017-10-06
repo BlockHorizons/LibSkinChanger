@@ -18,7 +18,7 @@ class Cube implements \JsonSerializable {
 	/** @var bool */
 	private $mirror = false;
 
-	public function __construct(array $cubeData) {
+	public function __construct(array $cubeData = []) {
 		$this->origin = $cubeData["origin"] ?? [0.0, 0.0, 0.0];
 		$this->size = $cubeData["size"] ?? [1.0, 1.0, 1.0];
 		$this->uv = $cubeData["uv"] ?? [0.0, 0.0];
@@ -55,9 +55,13 @@ class Cube implements \JsonSerializable {
 	 * Should be an array containing 3 floats.
 	 *
 	 * @param float[] $origin
+	 *
+	 * @return Cube
 	 */
-	public function setOrigin(array $origin): void {
+	public function setOrigin(array $origin): self {
 		$this->origin = $origin;
+
+		return $this;
 	}
 
 	/**
@@ -75,9 +79,13 @@ class Cube implements \JsonSerializable {
 	 * Should be an array containing 3 floats.
 	 *
 	 * @param float[] $size
+	 *
+	 * @return Cube
 	 */
-	public function setSize(array $size): void {
+	public function setSize(array $size): self {
 		$this->size = $size;
+
+		return $this;
 	}
 
 	/**
@@ -95,9 +103,13 @@ class Cube implements \JsonSerializable {
 	 * Should be an array containing 2 floats.
 	 *
 	 * @param float[] $uv
+	 *
+	 * @return Cube
 	 */
-	public function setUv(array $uv): void {
+	public function setUv(array $uv): self {
 		$this->uv = $uv;
+
+		return $this;
 	}
 
 	/**
@@ -113,9 +125,13 @@ class Cube implements \JsonSerializable {
 	 * Sets how far from the original size this cube should be extended.
 	 *
 	 * @param float $inflate
+	 *
+	 * @return Cube
 	 */
-	public function setInflate(float $inflate): void {
+	public function setInflate(float $inflate): self {
 		$this->inflate = $inflate;
+
+		return $this;
 	}
 
 	/**
@@ -131,8 +147,12 @@ class Cube implements \JsonSerializable {
 	 * Sets the rotation of this cube mirrored.
 	 *
 	 * @param bool $value
+	 *
+	 * @return Cube
 	 */
-	public function setMirrored(bool $value = true): void {
+	public function setMirrored(bool $value = true): self {
 		$this->mirror = $value;
+
+		return $this;
 	}
 }
