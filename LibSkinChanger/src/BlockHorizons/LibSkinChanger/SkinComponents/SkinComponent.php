@@ -11,8 +11,8 @@ abstract class SkinComponent {
 
 	/** @var SkinPixel[] */
 	private $pixels = [];
-	/** @var array */
-	private $geometry = [];
+	/** @var Geometry */
+	private $geometry = null;
 	/** @var int */
 	protected $skinWidth = 0;
 	/** @var int */
@@ -23,18 +23,28 @@ abstract class SkinComponent {
 	protected $yOffset = 0;
 	/** @var string */
 	protected $geometryComponentName = "";
+	/** @var bool */
+	protected $hasSkin = true;
 
 	public function __construct(PlayerSkin $skin, array $geometry = []) {
-		$minX = $this->xOffset;
-		$maxX = $minX;
-		$minY = $this->yOffset;
-		$maxY = $minY + $this->skinHeight;
-		for($x = $minX; $x < $maxX; $x++) {
-			for($y = $minY; $y < $maxY; $y++) {
-				$this->pixels[($y << 4) | $x] = $skin->getPixelAt($x, $y);
+		if($this->hasSkin()){
+			$minX = $this->xOffset;
+			$maxX = $minX;
+			$minY = $this->yOffset;
+			$maxY = $minY + $this->skinHeight;
+			for($x = $minX; $x < $maxX; $x++) {
+				for($y = $minY; $y < $maxY; $y++) {
+					$this->pixels[($y << 4) | $x] = $skin->getPixelAt($x, $y);
+				}
 			}
 		}
-		$this->geometry = new Geometry($geometry[$this->geometryComponentName]);
+		foreach($geometry["bones"] as $key => $component) {
+			if($component["name"] === $this->geometryComponentName) {
+				$this->geometry = new Geometry($geometry["bones"][$key]);
+				return;
+			}
+		}
+		$this->geometry = new Geometry(["name" => $this->geometryComponentName, "cubes" => []]);
 	}
 
 	/**
@@ -57,7 +67,14 @@ abstract class SkinComponent {
 		if($x < 0 || $y < 0) {
 			throw new \InvalidArgumentException("Pixel coordinates should be ranged 0 - 64");
 		}
-		return $this->pixels[($y << 4) | $x] ?? null;
+		return $this->pixels[($y << 6) | $x] ?? null;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function hasSkin(): bool {
+		return $this->hasSkin;
 	}
 
 	/**

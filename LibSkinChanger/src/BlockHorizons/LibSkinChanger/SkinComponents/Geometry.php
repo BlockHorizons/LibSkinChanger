@@ -18,6 +18,8 @@ class Geometry implements \JsonSerializable {
 	private $metaBoneType = "";
 	/** @var string */
 	private $parent = "";
+	/** @var bool */
+	private $noRender = false;
 
 	public function __construct(array $data) {
 		$default = [0.0, 0.0, 0.0];
@@ -29,6 +31,7 @@ class Geometry implements \JsonSerializable {
 		$this->name = $data["name"];
 		$this->parent = $data["parent"] ?? "";
 		$this->metaBoneType = $data["META_BoneType"] ?? "base";
+		$this->noRender = $data["noRender"] ?? false;
 	}
 
 	/**
@@ -54,9 +57,13 @@ class Geometry implements \JsonSerializable {
 
 	/**
 	 * @param float[] $pivot
+	 *
+	 * @return Geometry
 	 */
-	public function setPivot(array $pivot): void {
+	public function setPivot(array $pivot): self {
 		$this->pivot = $pivot;
+
+		return $this;
 	}
 
 	/**
@@ -68,9 +75,13 @@ class Geometry implements \JsonSerializable {
 
 	/**
 	 * @param float[] $rotation
+	 *
+	 * @return Geometry
 	 */
-	public function setRotation(array $rotation): void {
+	public function setRotation(array $rotation): self {
 		$this->rotation = $rotation;
+
+		return $this;
 	}
 
 	/**
@@ -82,9 +93,20 @@ class Geometry implements \JsonSerializable {
 
 	/**
 	 * @param Cube $cube
+	 *
+	 * @return Geometry
 	 */
-	public function addCube(Cube $cube): void {
+	public function addCube(Cube $cube): self {
 		$this->cubes[] = $cube;
+
+		return $this;
+	}
+
+	/**
+	 * @param int $key
+	 */
+	public function deleteCube(int $key): void {
+		unset($this->cubes[$key]);
 	}
 
 	public function deleteAllCubes(): void {
@@ -123,5 +145,23 @@ class Geometry implements \JsonSerializable {
 			$cubes[] = $cube->jsonSerialize();
 		}
 		return $cubes;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function shouldRender(): bool {
+		return !$this->noRender;
+	}
+
+	/**
+	 * @param bool $value
+	 *
+	 * @return Geometry
+	 */
+	public function setNoRender(bool $value = true): self {
+		$this->noRender = $value;
+
+		return $this;
 	}
 }
