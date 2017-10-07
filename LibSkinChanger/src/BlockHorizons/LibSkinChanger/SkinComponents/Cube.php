@@ -12,6 +12,8 @@ class Cube implements \JsonSerializable {
 	private $size = [];
 	/** @var float[] */
 	private $uv = [];
+	/** @var float[] */
+	private $velocity = [];
 
 	/** @var float */
 	private $inflate = 0.0;
@@ -22,6 +24,7 @@ class Cube implements \JsonSerializable {
 		$this->origin = $cubeData["origin"] ?? [0.0, 0.0, 0.0];
 		$this->size = $cubeData["size"] ?? [1.0, 1.0, 1.0];
 		$this->uv = $cubeData["uv"] ?? [0.0, 0.0];
+		$this->velocity = $cubeData["velocity"] ?? [0.0, 0.0, 0.0];
 
 		$this->inflate = $cubeData["inflate"] ?? 0.0;
 		$this->mirror = $cubeData["mirror"] ?? false;
@@ -36,7 +39,8 @@ class Cube implements \JsonSerializable {
 			"size" => $this->size,
 			"uv" => $this->uv,
 			"inflate" => $this->inflate,
-			"mirror" => $this->mirror
+			"mirror" => $this->mirror,
+			"velocity" => $this->velocity
 		];
 	}
 
@@ -154,5 +158,30 @@ class Cube implements \JsonSerializable {
 		$this->mirror = $value;
 
 		return $this;
+	}
+
+	/**
+	 * Sets the velocity of this cube. Velocity does nothing on its own.
+	 * This is simply a method to store plugin edited velocity in the cube.
+	 * Should be an array with 3 floats.
+	 *
+	 * @param float[] $velocity
+	 *
+	 * @return Cube
+	 */
+	public function setVelocity(array $velocity): self {
+		$this->velocity = $velocity;
+
+		return $this;
+	}
+
+	/**
+	 * Returns the velocity of this cube.
+	 * Returns an array with 3 floats.
+	 *
+	 * @return float[]
+	 */
+	public function getVelocity(): array {
+		return $this->velocity;
 	}
 }

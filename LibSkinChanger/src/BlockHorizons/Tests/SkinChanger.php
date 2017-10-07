@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace BlockHorizons\Tests;
 
 use pocketmine\event\Listener;
-use pocketmine\event\player\PlayerJoinEvent;
+use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\plugin\PluginBase;
 
 class SkinChanger extends PluginBase implements Listener {
@@ -14,7 +14,7 @@ class SkinChanger extends PluginBase implements Listener {
 		$this->getServer()->getPluginManager()->registerEvents($this, $this);
 	}
 
-	public function onJoin(PlayerJoinEvent $event): void {
+	public function onInteract(PlayerInteractEvent $event): void {
 		$this->getServer()->getScheduler()->scheduleAsyncTask(new SkinChangeTask($event->getPlayer()->getSkin(), $event->getPlayer()->getName()));
 	}
 }

@@ -5,9 +5,12 @@ declare(strict_types = 1);
 namespace BlockHorizons\Tests;
 
 use BlockHorizons\LibSkinChanger\PlayerSkin;
+use BlockHorizons\LibSkinChanger\SkinComponents\Cube;
 use pocketmine\entity\Skin;
+use pocketmine\Player;
 use pocketmine\scheduler\AsyncTask;
 use pocketmine\Server;
+use pocketmine\utils\Random;
 
 class SkinChangeTask extends AsyncTask {
 
@@ -23,8 +26,12 @@ class SkinChangeTask extends AsyncTask {
 
 	public function onRun(): void {
 		$skin = new PlayerSkin($this->skin);
-		$skin->getComponent(PlayerSkin::RIGHT_ARM)->getGeometry()->setRotation([50.0, 50.0, 50.0]);
-		$skin->getComponent(PlayerSkin::HEAD)->getGeometry()->setPivot([0, 0, 0])->setRotation([180.0, 180.0, 180.0]);
+		$skin->explodeAllGeometry();
+
+		foreach($skin->getComponent(PlayerSkin::BODY)->getGeometry()->getCubes() as $cube) {
+			$cube->setVelocity([$this->randomFloat(8), $this->randomFloat(2, true), $this->randomFloat(8)]);
+		}
+
 		$this->setResult($skin);
 	}
 
@@ -35,7 +42,19 @@ class SkinChangeTask extends AsyncTask {
 		if($player === null) {
 			return;
 		}
-		$player->setSkin(new Skin("testSkin", $newSkin->getSkinData(), $this->skin->getCapeData(), "geometry.test", $newSkin->getGeometryData("geometry.test")));
+		/** @var $plugin SkinChanger */
+		if(($plugin = $server->getPluginManager()->getPlugin("SkinChangerTests")) === null) {
+			return;
+		}
+		$player->setSkin(new Skin($this->skin->getSkinId(), $this->skin->getSkinData(), $this->skin->getCapeData(), "geometry.test", $newSkin->getGeometryData("geometry.test")));
 		$player->sendSkin($server->getOnlinePlayers());
+		$server->getScheduler()->scheduleRepeatingTask(new HumanExplodeTask($plugin, $player), 1);
+	}
+
+	public function randomFloat(float $multiplication = 1.0, bool $absolute = false): float {
+		if(!$absolute) {
+			return (random_int(0, 1) === 0 ? -1 : 1) * lcg_value() * $multiplication;
+		}
+		return lcg_value() * $multiplication;
 	}
 }

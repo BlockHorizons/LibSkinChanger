@@ -91,17 +91,20 @@ class PlayerSkin {
 	/** @var string */
 	private $geometryName = "";
 
-	public function __construct(Skin $skin) {
+	public function __construct(Skin $skin, bool $ignoreSkin = false) {
 		$skinData = $skin->getSkinData();
 		$geometryData = $skin->getGeometryData();
 		$geometryName = $skin->getGeometryName();
-		$stream = new BinaryStream($skinData);
-		$this->skinHeight = strlen($skinData) === 16384 ? 64 : 32;
 
-		for($x = 0; $x < $this->skinWidth; $x++) {
-			for($y = 0; $y < $this->skinHeight; $y++) {
-				if(!$stream->feof()) {
-					$this->pixels[($y << 6) | $x] = new SkinPixel($stream->getByte(), $stream->getByte(), $stream->getByte(), $stream->getByte());
+		$this->skinHeight = strlen($skinData) === 16384 ? 64 : 32;
+		if(!$ignoreSkin) {
+			$stream = new BinaryStream($skinData);
+
+			for($x = 0; $x < $this->skinWidth; $x++) {
+				for($y = 0; $y < $this->skinHeight; $y++) {
+					if(!$stream->feof()) {
+						$this->pixels[($y << 6) | $x] = new SkinPixel($stream->getByte(), $stream->getByte(), $stream->getByte(), $stream->getByte());
+					}
 				}
 			}
 		}
@@ -119,14 +122,21 @@ class PlayerSkin {
 			$geometryName = $parts[0];
 			$inheritance = $parts[1];
 		}
-		$geometry = array_merge($geometryData[$geometryName], $geometryData[$inheritance] ?? []);
+		$geometry = array_merge($geometryData[$geometryName . (!empty($inheritance) ? ":" . $inheritance : "")], $geometryData[$inheritance] ?? []);
 
 		if($this->skinHeight === 64) {
 			foreach(self::COMPONENTS_LARGE_FORMAT as $key => $component) {
-				$this->skinComponents[$key] = new $component($this, $geometry);
+				$this->skinComponents[$key] = new $component($this, $geometry, $ignoreSkin);
 			}
 		}
 		$this->geometryName = $geometryName;
+	}
+
+	/**
+	 * @return SkinPixel[]
+	 */
+	public function getPixels(): array {
+		return $this->pixels;
 	}
 
 	/**
@@ -164,7 +174,7 @@ class PlayerSkin {
 		if($x < 0 || $y < 0) {
 			throw new \InvalidArgumentException("Pixel coordinates should be ranged 0 - 64");
 		}
-		return $this->pixels[($y << 6) | $x] ?? null;
+		return $this->pixels[($x << 6) | $y] ?? null;
 	}
 
 	/**
@@ -222,5 +232,21 @@ class PlayerSkin {
 	 */
 	public function getGeometryName(): string {
 		return $this->geometryName;
+	}
+
+	/**
+	 * Explodes all geometry into smaller cubes.
+	 */
+	public function explodeAllGeometry(): void {
+		foreach($this->getSkinComponents() as $component) {
+			if($component instanceof Body) {
+				continue;
+			}
+			foreach($component->getGeometry()->getCubes() as $cube){
+				$this->getComponent(self::BODY)->getGeometry()->addCube($cube);
+			}
+			$component->getGeometry()->deleteAllCubes();
+		}
+		$this->getComponent(self::BODY)->getGeometry()->explodeCubes();
 	}
 }

@@ -85,4 +85,15 @@ class SkinPixel {
 	public function setB(int $b): void {
 		$this->b = $b & 0xff;
 	}
+
+	/**
+	 * @param int $r
+	 * @param int $g
+	 * @param int $b
+	 */
+	public function setRGB(int $r, int $g, int $b): void {
+		$this->setR($r);
+		$this->setG($g);
+		$this->setB($b);
+	}
 }

@@ -26,15 +26,15 @@ abstract class SkinComponent {
 	/** @var bool */
 	protected $hasSkin = true;
 
-	public function __construct(PlayerSkin $skin, array $geometry = []) {
-		if($this->hasSkin()){
+	public function __construct(PlayerSkin $skin, array $geometry = [], bool $ignoreSkin = false) {
+		if($this->hasSkin() && !$ignoreSkin){
 			$minX = $this->xOffset;
-			$maxX = $minX;
+			$maxX = $minX + $this->skinWidth;
 			$minY = $this->yOffset;
 			$maxY = $minY + $this->skinHeight;
 			for($x = $minX; $x < $maxX; $x++) {
 				for($y = $minY; $y < $maxY; $y++) {
-					$this->pixels[($y << 4) | $x] = $skin->getPixelAt($x, $y);
+					$this->pixels[($y << 6) | $x] = $skin->getPixelAt($x, $y);
 				}
 			}
 		}
@@ -56,6 +56,13 @@ abstract class SkinComponent {
 	}
 
 	/**
+	 * @return SkinPixel[]
+	 */
+	public function getPixels(): array {
+		return $this->pixels;
+	}
+
+	/**
 	 * Returns a pixel (SkinPixel.php) on a relative position in this skin component.
 	 *
 	 * @param int $x
@@ -70,7 +77,7 @@ abstract class SkinComponent {
 		if($x < 0 || $y < 0) {
 			throw new \InvalidArgumentException("Pixel coordinates should be ranged 0 - 64");
 		}
-		return $this->pixels[($y << 6) | $x] ?? null;
+		return $this->pixels[($x << 6) | $y] ?? null;
 	}
 
 	/**

@@ -198,4 +198,43 @@ class Geometry implements \JsonSerializable {
 
 		return $this;
 	}
+
+	/**
+	 * Returns a cube with the given index.
+	 *
+	 * @param int $index
+	 *
+	 * @return Cube|null
+	 */
+	public function getCube(int $index): ?Cube {
+		return $this->cubes[$index] ?? null;
+	}
+
+	/**
+	 * Explodes the body part into small cubes.
+	 *
+	 * @return Geometry
+	 */
+	public function explodeCubes(): self {
+		$cubes = [];
+		foreach($this->getCubes() as $cube) {
+			$origin = $cube->getOrigin();
+			$sizes = $cube->getSize();
+			for($x = 0; $x < $sizes[0]; $x++) {
+				for($y = 0; $y < $sizes[1]; $y++) {
+					for($z = 0; $z < $sizes[2]; $z++) {
+						if($x !== 0 && $y !== 0 && $z !== 0 && $x !== $sizes[0] - 1 && $y !== $sizes[1] - 1 && $z !== $sizes[2] - 1) {
+							continue;
+						}
+						$cubes[] = (new Cube())->setOrigin([$x + $origin[0], $y + $origin[1], $z + $origin[2]])->setUv([$cube->getUv()[0] + $x, $cube->getUv()[1] + $y]);
+					}
+				}
+			}
+		}
+		$this->deleteAllCubes();
+		foreach($cubes as $cube) {
+			$this->addCube($cube);
+		}
+		return $this;
+	}
 }
