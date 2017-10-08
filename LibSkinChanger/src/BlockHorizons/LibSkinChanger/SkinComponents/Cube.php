@@ -6,6 +6,13 @@ namespace BlockHorizons\LibSkinChanger\SkinComponents;
 
 class Cube implements \JsonSerializable {
 
+	/** @var float */
+	public $gravity = 0.04;
+	/** @var float */
+	public $drag = 0.98;
+	/** @var bool */
+	private $onGround = false;
+
 	/** @var float[] */
 	private $origin = [];
 	/** @var float[] */
@@ -183,5 +190,32 @@ class Cube implements \JsonSerializable {
 	 */
 	public function getVelocity(): array {
 		return $this->velocity;
+	}
+
+	public function applyGravity(): void {
+		$this->velocity[1] -= $this->gravity;
+		$this->origin[1] += $this->velocity[1] / 10;
+	}
+
+	/**
+	 * Attempts to move this cube.
+	 *
+	 * @return bool
+	 */
+	public function tryChangeMovement(): bool {
+		if($this->onGround) {
+			return false;
+		}
+		if($this->origin[1] <= 0.01) {
+			$this->onGround = true;
+			return false;
+		}
+		$this->velocity[0] *= $this->drag;
+		$this->velocity[2] *= $this->drag;
+
+		$this->origin[0] += $this->velocity[0] / 10;
+		$this->origin[2] += $this->velocity[2] / 10;
+		$this->applyGravity();
+		return true;
 	}
 }

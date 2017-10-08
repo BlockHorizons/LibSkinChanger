@@ -11,14 +11,14 @@ use pocketmine\Player;
 use pocketmine\scheduler\PluginTask;
 use pocketmine\Server;
 
-class HumanExplodeTask extends PluginTask {
+class HumanRebuildTask extends PluginTask {
 
 	/** @var Human */
 	private $player = null;
 	/** @var int */
 	private $tick = 0;
 	/** @var int */
-	private $frame = 0;
+	private $frame = 200;
 	/** @var Skin */
 	private $oldSkin = null;
 
@@ -36,19 +36,21 @@ class HumanExplodeTask extends PluginTask {
 		if(!$plugin->isFrameAvailable()){
 			return;
 		}
-		++$this->frame;
+		--$this->frame;
 		if(!$plugin->frameExists($this->frame)) {
-			$plugin->getServer()->getScheduler()->cancelTask($this->getTaskId());
-			$plugin->getServer()->getScheduler()->scheduleRepeatingTask(new HumanRebuildTask($plugin, $this->player), 3);
+			if($this->frame < 1) {
+				$plugin->getServer()->getScheduler()->cancelTask($this->getTaskId());
+				$plugin->emptyFrameCache();
+			}
 			return;
 		}
 
 		if($this->tick >= 300) {
 			$plugin->getServer()->getScheduler()->cancelTask($this->getTaskId());
-			$plugin->getServer()->getScheduler()->scheduleRepeatingTask(new HumanRebuildTask($plugin, $this->player), 3);
+			$plugin->emptyFrameCache();
 			return;
 		}
-		$data = $plugin->getNextFrame($this->frame);
+		$data = $plugin->getNextFrame($this->frame, true);
 
 		$newSkin = new Skin($this->oldSkin->getSkinId(), $this->oldSkin->getSkinData(), "", $data[0], $data[1]);
 		$this->player->setSkin($newSkin);

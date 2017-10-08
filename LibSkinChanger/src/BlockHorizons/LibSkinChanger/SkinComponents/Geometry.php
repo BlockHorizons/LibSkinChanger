@@ -217,7 +217,7 @@ class Geometry implements \JsonSerializable {
 	 */
 	public function explodeCubes(): self {
 		$cubes = [];
-		foreach($this->getCubes() as $cube) {
+		foreach($this->cubes as $cube) {
 			$origin = $cube->getOrigin();
 			$sizes = $cube->getSize();
 			for($x = 0; $x < $sizes[0]; $x++) {
@@ -233,8 +233,25 @@ class Geometry implements \JsonSerializable {
 		}
 		$this->deleteAllCubes();
 		foreach($cubes as $cube) {
-			$this->addCube($cube);
+			$this->cubes[] = $cube;
 		}
 		return $this;
+	}
+
+	/**
+	 * Attempts to change the movement of all cubes.
+	 */
+	public function tryChangeMovement(): bool {
+		$return = false;
+		foreach($this->cubes as $key => $cube) {
+			if(random_int(0, 500) === 1) {
+				$this->deleteCube($key);
+				continue;
+			}
+			if($cube->tryChangeMovement()) {
+				$return = true;
+			}
+		}
+		return $return;
 	}
 }

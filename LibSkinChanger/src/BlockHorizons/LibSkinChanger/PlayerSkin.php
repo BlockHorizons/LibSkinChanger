@@ -114,19 +114,33 @@ class PlayerSkin {
 			$geometryName = "geometry.humanoid";
 		}
 
-		$geometryData = json_decode($geometryData, true);
+		$fracture = explode(".", $geometryName);
+		$prefix = isset($fracture[1]) ? $fracture[0] . "." . $fracture[1] : $fracture[0];
+		$geometry = [];
 
-		$inheritance = "";
-		if(strpos($geometryName, ":") !== false) {
-			$parts = explode(":", $geometryName);
-			$geometryName = $parts[0];
-			$inheritance = $parts[1];
+		$geometryData = json_decode($geometryData, true);
+		foreach($geometryData as $name => $data) {
+			if(strpos($geometryName, $name) !== false) {
+				if($name === $geometryName || $name === $prefix) {
+					$geometry[$name] = $data;
+					while(strpos($name, ":") !== false) {
+						$name = explode(":", $name)[1];
+						if(isset($newGeometry[$name])) {
+							return;
+						}
+						$geometry[$name] = $geometryData[$name];
+					}
+				}
+			}
 		}
-		$geometry = array_merge($geometryData[$geometryName . (!empty($inheritance) ? ":" . $inheritance : "")], $geometryData[$inheritance] ?? []);
+		$newGeometry = [];
+		foreach($geometry as $name => $data) {
+			$newGeometry = array_merge($newGeometry, $data);
+		}
 
 		if($this->skinHeight === 64) {
 			foreach(self::COMPONENTS_LARGE_FORMAT as $key => $component) {
-				$this->skinComponents[$key] = new $component($this, $geometry, $ignoreSkin);
+				$this->skinComponents[$key] = new $component($this, $newGeometry, $ignoreSkin);
 			}
 		}
 		$this->geometryName = $geometryName;

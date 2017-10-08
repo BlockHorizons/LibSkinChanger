@@ -5,23 +5,17 @@ declare(strict_types = 1);
 namespace BlockHorizons\Tests;
 
 use BlockHorizons\LibSkinChanger\PlayerSkin;
-use BlockHorizons\LibSkinChanger\SkinComponents\Cube;
 use pocketmine\entity\Skin;
-use pocketmine\Player;
 use pocketmine\scheduler\AsyncTask;
 use pocketmine\Server;
-use pocketmine\utils\Random;
 
 class SkinChangeTask extends AsyncTask {
 
 	/** @var Skin */
 	private $skin = null;
-	/** @var string */
-	private $playerName = "";
 
-	public function __construct(Skin $skin, string $playerName) {
+	public function __construct(Skin $skin) {
 		$this->skin = $skin;
-		$this->playerName = $playerName;
 	}
 
 	public function onRun(): void {
@@ -29,26 +23,29 @@ class SkinChangeTask extends AsyncTask {
 		$skin->explodeAllGeometry();
 
 		foreach($skin->getComponent(PlayerSkin::BODY)->getGeometry()->getCubes() as $cube) {
-			$cube->setVelocity([$this->randomFloat(8), $this->randomFloat(2, true), $this->randomFloat(8)]);
+			$cube->setVelocity([$this->randomFloat(), $this->randomFloat(1, true), $this->randomFloat()]);
 		}
 
-		$this->setResult($skin);
+		$frames = [];
+		$geometryName = "geometry.test";
+		$this->publishProgress([[$geometryName, $skin->getGeometryData($geometryName)]]);
+
+		for($i = 1; $i <= 200; $i++) {
+			$skin->getComponent(PlayerSkin::BODY)->getGeometry()->tryChangeMovement();
+			$name = $geometryName . $i;
+			$frames[$i] = [$name, $skin->getGeometryData($name)];
+			$this->publishProgress($frames);
+			$frames = [];
+		}
 	}
 
-	public function onCompletion(Server $server): void {
-		/** @var PlayerSkin $newSkin */
-		$newSkin = $this->getResult();
-		$player = $server->getPlayerExact($this->playerName);
-		if($player === null) {
+	public function onProgressUpdate(Server $server, $progress): void {
+		/** @var SkinChanger $plugin */
+		$plugin = $server->getPluginManager()->getPlugin("SkinChangerTests");
+		if($plugin === null) {
 			return;
 		}
-		/** @var $plugin SkinChanger */
-		if(($plugin = $server->getPluginManager()->getPlugin("SkinChangerTests")) === null) {
-			return;
-		}
-		$player->setSkin(new Skin($this->skin->getSkinId(), $this->skin->getSkinData(), $this->skin->getCapeData(), "geometry.test", $newSkin->getGeometryData("geometry.test")));
-		$player->sendSkin($server->getOnlinePlayers());
-		$server->getScheduler()->scheduleRepeatingTask(new HumanExplodeTask($plugin, $player), 1);
+		$plugin->storeGeometryData($progress);
 	}
 
 	public function randomFloat(float $multiplication = 1.0, bool $absolute = false): float {
