@@ -76,7 +76,7 @@ class SkinChanger extends PluginBase implements Listener {
 		$human->sendSkin([$player]);
 
 		$this->getServer()->getScheduler()->scheduleAsyncTask(new SkinChangeTask($human->getSkin()));
-		$this->getServer()->getScheduler()->scheduleRepeatingTask(new HumanExplodeTask($this, $human), 3);
+		$this->getServer()->getScheduler()->scheduleRepeatingTask(new HumanExplodeTask($this, $human), 1);
 		$event->setCancelled();
 	}
 

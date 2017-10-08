@@ -39,13 +39,13 @@ class HumanExplodeTask extends PluginTask {
 		++$this->frame;
 		if(!$plugin->frameExists($this->frame)) {
 			$plugin->getServer()->getScheduler()->cancelTask($this->getTaskId());
-			$plugin->getServer()->getScheduler()->scheduleRepeatingTask(new HumanRebuildTask($plugin, $this->player), 3);
+			$plugin->getServer()->getScheduler()->scheduleRepeatingTask(new HumanRebuildTask($plugin, $this->player), 1);
 			return;
 		}
 
 		if($this->tick >= 300) {
 			$plugin->getServer()->getScheduler()->cancelTask($this->getTaskId());
-			$plugin->getServer()->getScheduler()->scheduleRepeatingTask(new HumanRebuildTask($plugin, $this->player), 3);
+			$plugin->getServer()->getScheduler()->scheduleRepeatingTask(new HumanRebuildTask($plugin, $this->player), 1);
 			return;
 		}
 		$data = $plugin->getNextFrame($this->frame);
