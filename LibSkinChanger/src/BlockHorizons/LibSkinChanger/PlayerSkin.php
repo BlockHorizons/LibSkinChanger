@@ -90,6 +90,8 @@ class PlayerSkin {
 	private $skinComponents = [];
 	/** @var string */
 	private $geometryName = "";
+	/** @var SkinGeometry */
+	private $geometry = null;
 
 	public function __construct(Skin $skin, bool $ignoreSkin = false) {
 		$skinData = $skin->getSkinData();
@@ -143,10 +145,22 @@ class PlayerSkin {
 				$this->skinComponents[$key] = new $component($this, $newGeometry, $ignoreSkin);
 			}
 		}
+		$this->geometry = new SkinGeometry($newGeometry);
 		$this->geometryName = $geometryName;
 	}
 
 	/**
+	 * Returns the geometry (SkinGeometry.php) with general skin geometry properties.
+	 *
+	 * @return SkinGeometry
+	 */
+	public function getGeometry(): SkinGeometry {
+		return $this->geometry;
+	}
+
+	/**
+	 * Returns all pixels in the skin.
+	 *
 	 * @return SkinPixel[]
 	 */
 	public function getPixels(): array {
@@ -236,6 +250,8 @@ class PlayerSkin {
 		foreach($this->getSkinComponents() as $component) {
 			$json[$geometryName]["bones"][] = $component->getGeometry()->jsonSerialize();
 		}
+		$json = array_merge($json, $this->geometry->jsonSerialize());
+
 		return json_encode($json);
 	}
 

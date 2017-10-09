@@ -4,7 +4,7 @@ A library for PocketMine-MP to easily manipulate Player skins and geometry.<br>
 [![Chat](https://img.shields.io/badge/chat-on%20discord-7289da.svg)](https://discord.gg/YynM57V) 
 
 ### How do I use this?
-LibSkinChanger is a so called virion. It gets injected in your plugin's Poggit phar build automatically if you configure your poggit.yml file correctly, so you don't have to do anything!
+LibSkinChanger is a so called virion. It gets injected in your plugin's Poggit phar build automatically if you configure your poggit.yml file correctly, so you don't have to do anything! Alternatively you could of course include this as a sub module or simply clone the repository in yours.
 <br>
 
 _But how do I do that?_
@@ -43,6 +43,7 @@ Due to potentially time consuming operations, it is recommended to make geometry
 API Files:
 - /PlayerSkin.php
 - /SkinPixel.php
+- /SkinGeometry.php
 - /SkinComponents/SkinComponent.php
 - /SkinComponents/Geometry.php
 - /SkinComponents/Cube.php
@@ -50,7 +51,9 @@ API Files:
 Example files:
 - /Tests/SkinChanger.php
 - /Tests/SkinChangeTask.php
+- /Tests/HumanExplodeTask.php
+- /Tests/HumanRebuildTask.php
 
-<br><br><br>
+<br><br>
 ##### Additional help can always be requested in the issue tracker. Don't hesitate to ask.
 ##### If you find a feature not working, or would like a new feature to be added. Please do so in the issue tracker, or contact us on Discord. (see above)
