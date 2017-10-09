@@ -44,7 +44,8 @@ class Geometry implements \JsonSerializable {
 			"cubes" => $this->getCubeArray(),
 			"name" => $this->name,
 			"META_BoneType" => $this->metaBoneType,
-			"parent" => $this->parent
+			"parent" => $this->parent,
+			"neverRender" => $this->noRender
 		];
 	}
 
