@@ -133,9 +133,7 @@ class Geometry implements \JsonSerializable {
 	 * Deletes all cubes of this component.
 	 */
 	public function deleteAllCubes(): void {
-		foreach($this->cubes as $key => $cube) {
-			unset($this->cubes[$key]);
-		}
+		$this->cubes = [];
 	}
 
 	/**
