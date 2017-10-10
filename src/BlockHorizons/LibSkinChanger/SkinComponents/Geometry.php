@@ -41,7 +41,7 @@ class Geometry implements \JsonSerializable {
 		return [
 			"pivot" => $this->pivot,
 			"rotation" => $this->rotation,
-			"cubes" => $this->getCubeArray(),
+			"cubes" => $this->cubes,
 			"name" => $this->name,
 			"META_BoneType" => $this->metaBoneType,
 			"parent" => $this->parent,
@@ -171,7 +171,7 @@ class Geometry implements \JsonSerializable {
 	public function getCubeArray(): array {
 		$cubes = [];
 		foreach($this->cubes as $cube) {
-			$cubes[] = $cube->jsonSerialize();
+			$cubes[] = (array) $cube;
 		}
 		return $cubes;
 	}
@@ -232,9 +232,7 @@ class Geometry implements \JsonSerializable {
 			}
 		}
 		$this->deleteAllCubes();
-		foreach($cubes as $cube) {
-			$this->cubes[] = $cube;
-		}
+		$this->cubes = $cubes;
 		return $this;
 	}
 
@@ -245,7 +243,7 @@ class Geometry implements \JsonSerializable {
 		$return = false;
 		foreach($this->cubes as $key => $cube) {
 			if(random_int(0, 500) === 1) {
-				$this->deleteCube($key);
+				unset($this->cubes[$key]);
 				continue;
 			}
 			if($cube->tryChangeMovement()) {

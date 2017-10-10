@@ -192,6 +192,9 @@ class Cube implements \JsonSerializable {
 		return $this->velocity;
 	}
 
+	/**
+	 * Applies gravity on this cube.
+	 */
 	public function applyGravity(): void {
 		$this->velocity[1] -= $this->gravity;
 		$this->origin[1] += $this->velocity[1] / 10;
