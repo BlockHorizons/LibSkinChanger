@@ -270,15 +270,17 @@ class PlayerSkin {
 	 * Explodes all geometry into smaller cubes.
 	 */
 	public function explodeAllGeometry(): void {
+		$bodyGeometry = $this->getComponent(self::BODY)->getGeometry();
 		foreach($this->getSkinComponents() as $component) {
 			if($component instanceof Body) {
 				continue;
 			}
+
 			foreach($component->getGeometry()->getCubes() as $cube){
-				$this->getComponent(self::BODY)->getGeometry()->addCube($cube);
+				$bodyGeometry->addCube($cube);
 			}
 			$component->getGeometry()->deleteAllCubes();
 		}
-		$this->getComponent(self::BODY)->getGeometry()->explodeCubes();
+		$bodyGeometry->explodeCubes();
 	}
 }
