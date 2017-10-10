@@ -7,9 +7,15 @@ namespace BlockHorizons\LibSkinChanger;
 class SkinPixel {
 
 	/** @var int */
-	private $a, $r, $g, $b;
+	private $a = 0;
+	/** @var int */
+	private $r = 0;
+	/** @var int */
+	private $g = 0;
+	/** @var int */
+	private $b = 0;
 
-	public function __construct(int $r, int $g, int $b, int $a = 0xff){
+	public function __construct(int $r, int $g, int $b, int $a = 0xff) {
 		$this->r = $r & 0xff;
 		$this->g = $g & 0xff;
 		$this->b = $b & 0xff;
@@ -17,19 +23,20 @@ class SkinPixel {
 	}
 
 	/**
-	 * Returns the alpha (transparency) value of this pixel.
+	 * Returns the alpha (opacity) value of this pixel.
 	 *
 	 * @return int
 	 */
-	public function getA(): int {
+	public function getAlpha(): int {
 		return $this->a;
 	}
+
 	/**
 	 * Sets the alpha (opacity) value of this colour, lower = more transparent.
 	 *
 	 * @param int $a
 	 */
-	public function setA(int $a): void {
+	public function setAlpha(int $a): void {
 		$this->a = $a & 0xff;
 	}
 

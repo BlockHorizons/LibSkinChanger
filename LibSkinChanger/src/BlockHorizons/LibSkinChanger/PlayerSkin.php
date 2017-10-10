@@ -250,7 +250,7 @@ class PlayerSkin {
 		foreach($this->getSkinComponents() as $component) {
 			$json[$geometryName]["bones"][] = $component->getGeometry()->jsonSerialize();
 		}
-		$json = array_merge($json, $this->geometry->jsonSerialize());
+		$json = array_merge($json, [$geometryName => $this->geometry->jsonSerialize()]);
 
 		return json_encode($json);
 	}

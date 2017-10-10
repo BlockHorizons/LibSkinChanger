@@ -212,7 +212,8 @@ class Geometry implements \JsonSerializable {
 	}
 
 	/**
-	 * Explodes the body part into small cubes.
+	 * Explodes (subdivides) the body part into small cubes.
+	 * This function does not add velocity to the cubes.
 	 *
 	 * @return Geometry
 	 */
