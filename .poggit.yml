@@ -3,7 +3,7 @@ branches:
 - master
 projects:
   LibSkinChanger:
-    path: LibSkinChanger/
+    path: ""
     model: virion
     type: library
 ...
