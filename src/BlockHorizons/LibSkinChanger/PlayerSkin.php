@@ -50,7 +50,7 @@ class PlayerSkin {
 	const HELMET = 12;
 
 	/**
-	 * Skin components for 64x64 skins.
+	 * Skin components for 64x64 and 128x128 skins.
 	 */
 	const COMPONENTS_LARGE_FORMAT = [
 		self::HEAD => Head::class,
@@ -98,7 +98,10 @@ class PlayerSkin {
 		$geometryData = $skin->getGeometryData();
 		$geometryName = $skin->getGeometryName();
 
-		$this->skinHeight = strlen($skinData) === 16384 ? 64 : 32;
+		$this->skinHeight = sqrt(strlen($skinData) / 4);
+		if($this->skinHeight < 64) {
+			$this->skinHeight = 32;
+		}
 		if(!$ignoreSkin) {
 			$stream = new BinaryStream($skinData);
 
@@ -140,8 +143,12 @@ class PlayerSkin {
 			$newGeometry = array_merge($newGeometry, $data);
 		}
 
-		if($this->skinHeight === 64) {
+		if($this->skinHeight !== 32) {
 			foreach(self::COMPONENTS_LARGE_FORMAT as $key => $component) {
+				$this->skinComponents[$key] = new $component($this, $newGeometry, $ignoreSkin);
+			}
+		} else {
+			foreach(self::COMPONENTS_SMALL_FORMAT as $key => $component) {
 				$this->skinComponents[$key] = new $component($this, $newGeometry, $ignoreSkin);
 			}
 		}
