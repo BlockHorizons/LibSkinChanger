@@ -34,7 +34,7 @@ class PlayerSkin {
 	const RIGHT_ARM = 4;
 
 	/**
-	 * These components are found in 64x64 sized skins only.
+	 * These components are found in 64x64 and 128x128 sized skins only.
 	 */
 	const RIGHT_PANTS = 5;
 	const JACKET = 6;
