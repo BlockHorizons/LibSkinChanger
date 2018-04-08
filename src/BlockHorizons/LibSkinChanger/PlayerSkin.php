@@ -100,7 +100,7 @@ class PlayerSkin {
 		$geometryData = $skin->getGeometryData();
 		$geometryName = $skin->getGeometryName();
 
-		$this->skinHeight = sqrt(strlen($skinData) / 4);
+		$this->skinHeight = (int) sqrt(strlen($skinData) / 4);
 		$this->skinWidth = $this->skinHeight;
 		if($this->skinHeight < 64) {
 			$this->skinHeight = 32;
