@@ -86,6 +86,8 @@ class PlayerSkin {
 	private $pixels = [];
 	/** @var int */
 	private $skinWidth = 64;
+	/** @var int */
+	private $skinHeight = 64;
 	/** @var SkinComponent[] */
 	private $skinComponents = [];
 	/** @var string */
@@ -99,8 +101,10 @@ class PlayerSkin {
 		$geometryName = $skin->getGeometryName();
 
 		$this->skinHeight = sqrt(strlen($skinData) / 4);
+		$this->skinWidth = $this->skinHeight;
 		if($this->skinHeight < 64) {
 			$this->skinHeight = 32;
+			$this->skinWidth = 64;
 		}
 		if(!$ignoreSkin) {
 			$stream = new BinaryStream($skinData);
